@@ -5205,13 +5205,14 @@ int pc_checkjoblevelup (struct map_session_data *sd)
 int pc_gainexp (struct map_session_data *sd, int base_exp, int job_exp)
 {
     return pc_gainexp_reason (sd, base_exp, job_exp,
-                              PC_GAINEXP_REASON_KILLING);
+                              PC_GAINEXP_REASON_UNKNOWN);
 }
 
 int pc_gainexp_reason (struct map_session_data *sd, int base_exp, int job_exp,
                        int reason)
 {
     char output[256];
+    const char *reason_str;
     nullpo_retr (0, sd);
 
     if (sd->bl.prev == NULL || pc_isdead (sd))
@@ -5220,9 +5221,25 @@ int pc_gainexp_reason (struct map_session_data *sd, int base_exp, int job_exp,
     if ((battle_config.pvp_exp == 0) && map[sd->bl.m].flag.pvp) // [MouseJstr]
         return 0;               // no exp on pvp maps
 
-    MAP_LOG_PC (sd, "GAINXP %d %d %s", base_exp, job_exp,
-                ((reason ==
-                  2) ? "SCRIPTXP" : ((reason == 1) ? "HEALXP" : "KILLXP")));
+    switch (reason) {
+        case PC_GAINEXP_REASON_KILLING:
+            reason_str = "KILLXP";
+            break;
+        case PC_GAINEXP_REASON_HEALING:
+            reason_str = "HEALXP";
+            break;
+        case PC_GAINEXP_REASON_SCRIPT:
+            reason_str = "SCRIPTXP";
+            break;
+        case PC_GAINEXP_REASON_SHARING:
+            reason_str = "SHAREXP";
+            break;
+        case PC_GAINEXP_REASON_UNKNOWN:
+        default:
+            reason_str = "UNKNOWNXP";
+            break;
+    }
+    MAP_LOG_PC (sd, "GAINXP %d %d %s", base_exp, job_exp, reason_str);
 
     if (sd->sc_data[SC_RICHMANKIM].timer != -1)
     {                           // added bounds checking [Vaalris]

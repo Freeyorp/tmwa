@@ -114,6 +114,8 @@ int  pc_gainexp (struct map_session_data *, int, int);
 #define PC_GAINEXP_REASON_KILLING	0
 #define PC_GAINEXP_REASON_HEALING	1
 #define PC_GAINEXP_REASON_SCRIPT	2
+#define PC_GAINEXP_REASON_SHARING	3
+#define PC_GAINEXP_REASON_UNKNOWN	-1
 int  pc_gainexp_reason (struct map_session_data *, int, int, int reason);
 int  pc_extract_healer_exp (struct map_session_data *, int max);    // [Fate] Used by healers: extract healer-xp from the target, return result (up to max)
 

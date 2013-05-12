@@ -737,7 +737,7 @@ int party_exp_share (struct party *p, int map, int base_exp, int job_exp)
         return 0;
     for (i = 0; i < MAX_PARTY; i++)
         if ((sd = p->member[i].sd) != NULL && sd->bl.m == map)
-            pc_gainexp (sd, base_exp / c + 1, job_exp / c + 1);
+            pc_gainexp_reason (sd, base_exp / c + 1, job_exp / c + 1, PC_GAINEXP_REASON_SHARING);
     return 0;
 }
 
